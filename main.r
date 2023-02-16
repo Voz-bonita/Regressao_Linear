@@ -1,6 +1,6 @@
 pacman::p_load(
     "readxl", "dplyr", "ggplot2", "tidyr",
-    "kableExtra", "ggcorrplot"
+    "kableExtra", "ggcorrplot", "psych", "purrr"
 )
 source("funcoes_aux.r")
 
@@ -31,3 +31,9 @@ non_lin <- names(data)[!(names(data) %in% lin)]
 cor_matrix_plot(data)
 cor_matrix_plot(select(data, non_lin))
 cor_matrix_plot(select(data, lin))
+
+
+ggplot(data = data) +
+    geom_point(aes(x = pop65, y = medicos)) +
+    theme_bw()
+model_full <- lm(data = data, medicos ~ .)
