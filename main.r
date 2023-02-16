@@ -14,3 +14,14 @@ data <- read_xls("dados.xls") %>%
         "regiao"
     )) %>%
     select(-c(id, cidade, estado, regiao))
+
+ggplot(
+    gather(select(data, -medicos)),
+    aes(x = value, y = rep(data$medicos, ncol(data) - 1))
+) +
+    geom_point() +
+    facet_wrap(~key, scales = "free_x") +
+    theme_bw()
+
+# visualmente lineares
+lin <- c("crimes", "leitos", "populacao", "renda_total")
