@@ -12,7 +12,7 @@ format_tab <- function(df, caption, ...) {
     return(tabela)
 }
 
-cov_matrix_plot <- function(x) {
+cor_matrix_plot <- function(x) {
     return(model.matrix(~ 0 + ., data = x) %>%
         cor(use = "pairwise.complete.obs") %>%
         ggcorrplot(show.diag = F, type = "lower", lab = TRUE, lab_size = 2) +

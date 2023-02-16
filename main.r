@@ -26,4 +26,4 @@ ggplot(
 # visualmente lineares
 lin <- c("crimes", "leitos", "populacao", "renda_total")
 
-cov_matrix_plot(data)
+cor_matrix_plot(data)
