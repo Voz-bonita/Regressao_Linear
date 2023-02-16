@@ -15,14 +15,6 @@ data <- read_xls("dados.xls") %>%
     )) %>%
     select(-c(id, Cidade, Estado, `Região geográfica`))
 
-ggplot(
-    gather(select(data, -Médicos)),
-    aes(x = value, y = rep(data$Médicos, ncol(data) - 1))
-) +
-    geom_point() +
-    facet_wrap(~key, scales = "free_x") +
-    theme_bw()
-
 # visualmente lineares
 lin <- c("Crimes", "Leitos", "População", "Renda Total")
 # visualmente não lineares
@@ -32,8 +24,4 @@ cor_matrix_plot(data)
 cor_matrix_plot(select(data, non_lin))
 cor_matrix_plot(select(data, lin))
 
-
-ggplot(data = data) +
-    geom_point(aes(x = pop65, y = medicos)) +
-    theme_bw()
 model_full <- lm(data = data, medicos ~ .)

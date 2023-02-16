@@ -14,3 +14,12 @@ describe(data) %>%
         "Min", "Max", "Skew", "Kurtosis", "EP"
     )) %>%
     format_tab("\\label{table:desc}Medidas descritivas das variáveis mantidas durante o estudo.", "latex", digits = 0)
+
+(ggplot(
+    gather(select(data, -Médicos)),
+    aes(x = value, y = rep(data$Médicos, ncol(data) - 1))
+) +
+    geom_point() +
+    facet_wrap(~key, scales = "free_x") +
+    theme_bw() + ylab("Número de médicos") + xlab("Valor")) %>%
+    ggsave(filename = "assets/dispersao_y.png", .)
