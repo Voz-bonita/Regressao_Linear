@@ -21,24 +21,29 @@ describe(data_sem_regiao) %>%
 ) +
     geom_point() +
     facet_wrap(~key, scales = "free_x") +
-    theme_bw() + ylab("Número de médicos") + xlab("Valor")) %>%
+    theme_bw() +
+    ylab("Número de médicos") +
+    xlab("Valor")) %>%
     ggsave(filename = "assets/dispersao_y.png", .)
 
 (ggplot(
     pivot_longer(data, cols = -c(`Região geográfica`, Médicos)),
-    aes(x = log(value), y = log(Médicos), color = `Região geográfica`)) +
+    aes(x = log(value), y = log(Médicos), color = `Região geográfica`)
+) +
     geom_point() +
     facet_wrap(~name, scales = "free_x") +
-    theme_bw() + ylab("Número de médicos") + xlab("Valor") +
+    theme_bw() +
+    ylab("Número de médicos") +
+    xlab("Valor") +
     theme(legend.position = "bottom")) %>%
     ggsave(filename = "assets/dispersao_logxlogy.png", .)
 
 
-cor(data[,lin], data$Médicos) %>%
-    cbind(cor(log(data[,lin]), log(data$Médicos))) %>%
+cor(data[, lin], data$Médicos) %>%
+    cbind(cor(log(data[, lin]), log(data$Médicos))) %>%
     as.data.frame() %>%
-    rename_all(~c("r_1", "r_2")) %>%
-    mutate("$Z_c$" = (atanh(r_1) - atanh(r_2))/sqrt(2/437)) %>%
+    rename_all(~ c("r_1", "r_2")) %>%
+    mutate("$Z_c$" = (atanh(r_1) - atanh(r_2)) / sqrt(2 / 437)) %>%
     round(2) %>%
-    mutate("P(Z > $Z_c$)" = pnorm(`$Z_c$`, lower.tail = F)) %>% 
+    mutate("P(Z > $Z_c$)" = pnorm(`$Z_c$`, lower.tail = F)) %>%
     format_tab("\\label{tab:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
