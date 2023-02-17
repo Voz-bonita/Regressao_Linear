@@ -33,7 +33,7 @@ lin <- c("Crimes", "Leitos", "População", "Renda Total")
 train_df_medicos <- select(train_df, c("Médicos", "Região geográfica", lin)) %>% dummy_reg()
 val_df_medicos <- select(val_df, c("Médicos", "Região geográfica", lin)) %>% dummy_reg()
 
-modelo_completo_medicos <- lm(Médicos ~ ., data = train_df_medicos)
-summary(modelo_completo_medicos)
-anova_lm_completo_medicos <- anova(modelo_completo_medicos)
-anova_reduzida(anova_lm_completo_medicos)
+intercepto_medicos <- lm(Médicos ~ 1, data = train_df_medicos)
+completo_medicos <- lm(Médicos ~ ., data = train_df_medicos)
+both_medicos <- step(intercepto_medicos, direction = "both", scope = formula(completo_medicos), trace = 1)
+both_medicos$anova
