@@ -13,15 +13,15 @@ data <- read_xls("dados.xls") %>%
         "Desempregados", "Renda p/c", "Renda Total",
         "Região geográfica"
     )) %>%
-    select(-c(id, Cidade, Estado, `Região geográfica`))
+    select(-c(id, Cidade, Estado))
 
+data$`Região geográfica` <- factor(data$`Região geográfica`, levels = 1:4)
+data_sem_regiao <- select(data, -`Região geográfica`)
 # visualmente lineares
 lin <- c("Crimes", "Leitos", "População", "Renda Total")
 # visualmente não lineares
 non_lin <- names(data)[!(names(data) %in% lin)]
 
-cor_matrix_plot(data)
-cor_matrix_plot(select(data, non_lin))
-cor_matrix_plot(select(data, lin))
-
-model_full <- lm(data = data, medicos ~ .)
+cor_matrix_plot(data_sem_regiao)
+cor_matrix_plot(select(data_sem_regiao, non_lin))
+cor_matrix_plot(select(data_sem_regiao, lin))
