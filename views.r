@@ -47,3 +47,5 @@ cor(data[, lin], data$Médicos) %>%
     round(2) %>%
     mutate("P(Z > $Z_c$)" = pnorm(`$Z_c$`, lower.tail = F)) %>%
     format_tab("\\label{tab:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
+
+ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regiao, lin)))

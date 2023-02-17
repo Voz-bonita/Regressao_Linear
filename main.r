@@ -17,11 +17,6 @@ data <- read_xls("dados.xls") %>%
 
 data$`Região geográfica` <- factor(data$`Região geográfica`, levels = 1:4)
 data_sem_regiao <- select(data, -`Região geográfica`)
+
 # visualmente lineares
 lin <- c("Crimes", "Leitos", "População", "Renda Total")
-# visualmente não lineares
-non_lin <- names(data)[!(names(data) %in% lin)]
-
-cor_matrix_plot(data_sem_regiao)
-cor_matrix_plot(select(data_sem_regiao, non_lin))
-cor_matrix_plot(select(data_sem_regiao, lin))
