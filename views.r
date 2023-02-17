@@ -33,6 +33,12 @@ describe(data_sem_regiao) %>%
     theme(legend.position = "bottom")) %>%
     ggsave(filename = "assets/dispersao_logxlogy.png", .)
 
-c1 <- cor(data$População, data$Médicos)
-c2 <- cor(log(data$População), log(data$Médicos))
-pnorm((atanh(c1) - atanh(c2))/sqrt(2/437), lower.tail = F)
+
+cor(data[,lin], data$Médicos) %>%
+    cbind(cor(log(data[,lin]), log(data$Médicos))) %>%
+    as.data.frame() %>%
+    rename_all(~c("r_1", "r_2")) %>%
+    mutate("$Z_c$" = (atanh(r_1) - atanh(r_2))/sqrt(2/437)) %>%
+    round(2) %>%
+    mutate("P(Z > $Z_c$)" = pnorm(`$Z_c$`, lower.tail = F)) %>% 
+    format_tab("\\label{tab:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
