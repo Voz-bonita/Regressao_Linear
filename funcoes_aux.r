@@ -41,3 +41,17 @@ anova_reduzida <- function(anova_base) {
 
     return(anova_custom)
 }
+
+dummy_reg <- function(df) {
+    n <- nrow(df)
+    to_dummy <- cbind(1:n, df$`Região geográfica`) %>%
+    as.data.frame() %>%
+    rename_all(~ c("id", "Região geográfica")) %>%
+    mutate("Região geográfica" = factor(`Região geográfica`, levels = 1:4))
+
+    dummy <- dummyVars(" ~ .", data = to_dummy)
+    dummy_cols <- data.frame(predict(dummy, newdata = to_dummy))[, 2:4] %>%
+        rename_all(~c("Região1", "Região2", "Região3"))
+    
+    return(cbind(select(df, -`Região geográfica`), dummy_cols))
+}
