@@ -23,3 +23,16 @@ describe(data_sem_regiao) %>%
     facet_wrap(~key, scales = "free_x") +
     theme_bw() + ylab("Número de médicos") + xlab("Valor")) %>%
     ggsave(filename = "assets/dispersao_y.png", .)
+
+(ggplot(
+    pivot_longer(data, cols = -c(`Região geográfica`, Médicos)),
+    aes(x = log(value), y = log(Médicos), color = `Região geográfica`)) +
+    geom_point() +
+    facet_wrap(~name, scales = "free_x") +
+    theme_bw() + ylab("Número de médicos") + xlab("Valor") +
+    theme(legend.position = "bottom")) %>%
+    ggsave(filename = "assets/dispersao_logxlogy.png", .)
+
+c1 <- cor(data$População, data$Médicos)
+c2 <- cor(log(data$População), log(data$Médicos))
+pnorm((atanh(c1) - atanh(c2))/sqrt(2/437), lower.tail = F)
