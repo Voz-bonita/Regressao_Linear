@@ -39,3 +39,13 @@ both_medicos <- step(intercepto_medicos, direction = "both", scope = formula(com
 
 both_medicos$coefficients
 both_medicos$anova
+
+val_mod <- lm(formula = Médicos ~ `Renda Total` + Leitos + População, data = val_df_medicos)
+val_fit <- predict(both_medicos, val_df_medicos)
+val_res <- val_df_medicos$Médicos - val_fit
+
+val_SSTO <- sum((val_df_medicos$Médicos - mean(val_df_medicos$Médicos))^2)
+val_SSE <- sum(val_res)^2
+val_R2a <- 1 - (n / 2 - 1) / (n - length(val_mod$coefficients)) * val_SSE / val_SSTO
+
+final_mod <- lm(formula = Médicos ~ `Renda Total` + Leitos + População, data = data)
