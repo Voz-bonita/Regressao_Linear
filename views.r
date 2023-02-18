@@ -81,3 +81,9 @@ anova_reduzida(alr3::pureErrorAnova(both_medicos)) %>%
 summary(gvlma(both_medicos)) %>%
     as.data.frame() %>%
     format_tab("\\label{table:pressupostosmed}Testes para suposições sobre o MRL encontrado.", digits = 2, "latex")
+
+negativos <- which(both_medicos$fitted.values < 0)
+train_df_medicos[negativos, ] %>%
+    cbind(round(both_medicos$fitted.values[negativos])) %>%
+    select(-Crimes) %>%
+    format_tab("\\label{table:negativomed}Observações cujos valores previstos para o número de médicos foi negativo.", digits = 2, "latex")
