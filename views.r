@@ -51,7 +51,7 @@ cor(train_df[, lin], train_df$Médicos) %>%
 ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regiao, c(lin, "Médicos"))))
 
 anova_reduzida(anova(both_medicos)) %>%
-    format_tab("\\label{table:anovamed}ANOVA para oo MRL encontrado para o número de médicos da cidade", digits = 2, "latex")
+    format_tab("\\label{table:anovamed}ANOVA para o MRL encontrado para o número de médicos da cidade", digits = 2, "latex")
 
 summary(both_medicos)[[4]] %>%
     as.data.frame() %>%
