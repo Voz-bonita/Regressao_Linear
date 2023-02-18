@@ -56,3 +56,30 @@ dummy_reg <- function(df) {
 
     return(cbind(select(df, -`Região geográfica`), dummy_cols))
 }
+
+# breusch_pagan <- function(model, dataset, response) {
+#     p <- length(model$coefficients)
+#     n <- nrow(dataset)
+
+#     aux_mod <- lm(
+#         model$residuals^2 ~ .,
+#         data = select(train_df_medicos, -all_of(response))
+#     )
+    
+#     aux_res <- residuals(aux_mod)
+#     SSReg <- sum((predict(aux_mod) - mean(both_medicos$residuals^2))^2)
+#     aux_QMReg <- SSReg / (p - 1)
+#     SSRes <- sum(aux_res^2)
+#     aux_QMRes <- SSRes / (n - 3)
+#     F_calc <- aux_QMReg / aux_QMRes
+    
+#     p_val <- pf(F_calc, p - 1, n - 3, lower.tail = F)
+#     return(tibble(
+#         "Fonte de Variação" = c("Regressão", "Resíduos"),
+#         "gl" = c(p - 1, n - 3),
+#         "SS" = c(SSReg, SSRes),
+#         "QM" = c(aux_QMReg, aux_QMRes),
+#         "$F_c$" = c(F_calc, NA),
+#         "$P(F > F_c)$" = c(p_val, NA)
+#     ))
+# }
