@@ -69,3 +69,9 @@ summary(both_medicos)[[4]] %>%
 shapiro.test(both_medicos$residuals)
 qqnorm(both_medicos$residuals)
 qqline(both_medicos$residuals)
+
+anova_reduzida(alr3::pureErrorAnova(both_medicos))
+
+bptest(both_medicos)
+
+gvlma(both_medicos)

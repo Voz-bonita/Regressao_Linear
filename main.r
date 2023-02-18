@@ -1,7 +1,7 @@
 pacman::p_load(
     "readxl", "dplyr", "ggplot2", "tidyr",
     "kableExtra", "ggcorrplot", "psych", "purrr",
-    "caret"
+    "caret", "gvlma", "lmtest"
 )
 source("funcoes_aux.r", encoding = "utf8")
 
