@@ -87,3 +87,15 @@ train_df_medicos[negativos, ] %>%
     cbind(round(both_medicos$fitted.values[negativos])) %>%
     select(-Crimes) %>%
     format_tab("\\label{table:negativomed}Observações cujos valores previstos para o número de médicos foi negativo.", digits = 2, "latex")
+
+(ggplot(
+    pivot_longer(train_df_crimes, cols = -c(`Região geográfica`, Crimes)),
+    aes(x = log(value), y = log(Crimes), color = `Região geográfica`)
+) +
+    geom_point() +
+    facet_wrap(~name, scales = "free_x") +
+    theme_bw() +
+    ylab("Taxa de crimes") +
+    xlab("Valor") +
+    theme(legend.position = "bottom")) %>%
+    ggsave(filename = "assets/dispersao_logxlogy_crimes.png", .)

@@ -49,3 +49,11 @@ val_SSE <- sum(val_res)^2
 val_R2a <- 1 - (n / 2 - 1) / (n - length(val_mod$coefficients)) * val_SSE / val_SSTO
 
 final_mod <- lm(formula = Médicos ~ `Renda Total` + Leitos + População, data = data)
+
+#---------------------------------
+data_crimes <- data %>%
+    mutate("Crimes" = Crimes / População * 1e5) %>%
+    select(-População)
+
+train_df_crimes <- data[train_i, ]
+val_df_crimes <- data[val_i, ]
