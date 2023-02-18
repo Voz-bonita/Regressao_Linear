@@ -46,6 +46,44 @@ cor(train_df[, lin], train_df$Médicos) %>%
     mutate("$Z_c$" = (atanh(r_1) - atanh(r_2)) / sqrt(2 / (nrow(train_df) - 3))) %>%
     round(2) %>%
     mutate("P(Z > $Z_c$)" = format(pnorm(`$Z_c$`, lower.tail = F), digits = 3)) %>%
-    format_tab("\\label{tab:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
+    format_tab("\\label{table:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
 
-ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regiao, lin)))
+ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regiao, c(lin, "Médicos"))))
+
+anova_reduzida(anova(both_medicos)) %>%
+    format_tab("\\label{table:anovamed}ANOVA para o MRL encontrado para o número de médicos da cidade", digits = 2, "latex")
+
+summary(both_medicos)[[4]] %>%
+    as.data.frame() %>%
+    rename_all(~ c("Estimativa", "EP", "$T_c$", "$P(T > |T_c|)$")) %>%
+    format_tab("\\label{table:ttestmed}Testes T performados para os coeficientes para o MRL encontrado", digits = 2, "latex")
+
+(ggplot(data = NULL) +
+    geom_point(aes(x = 1:(n / 2), y = both_medicos$residuals), size = 2) +
+    xlab("Ordem") +
+    ylab("Resíduo") +
+    scale_x_continuous(breaks = NULL) +
+    theme_bw()) %>%
+    ggsave(filename = "assets/seq_plot_medicos.png", .)
+
+shapiro.test(both_medicos$residuals)
+
+png(filename = "assets/qqplot_medicos.png")
+qqnorm(both_medicos$residuals)
+qqline(both_medicos$residuals)
+dev.off()
+
+anova_reduzida(alr3::pureErrorAnova(both_medicos)) %>%
+    format_tab("\\label{table:lackmed}Teste de falta de ajustamento para o MRL encontrado.", digits = 2, "latex")
+
+# bptest(both_medicos)
+
+summary(gvlma(both_medicos)) %>%
+    as.data.frame() %>%
+    format_tab("\\label{table:pressupostosmed}Testes para suposições sobre o MRL encontrado.", digits = 2, "latex")
+
+negativos <- which(both_medicos$fitted.values < 0)
+train_df_medicos[negativos, ] %>%
+    cbind(round(both_medicos$fitted.values[negativos])) %>%
+    select(-Crimes) %>%
+    format_tab("\\label{table:negativomed}Observações cujos valores previstos para o número de médicos foi negativo.", digits = 2, "latex")

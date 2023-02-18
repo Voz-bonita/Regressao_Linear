@@ -16,7 +16,8 @@ cor_matrix_plot <- function(x) {
     return(model.matrix(~ 0 + ., data = x) %>%
         cor(use = "pairwise.complete.obs") %>%
         ggcorrplot(show.diag = F, type = "lower", lab = T, lab_size = 7) +
-        theme(axis.text.x = element_text(angle = 90)))
+        theme(axis.text.x = element_text(angle = 30, size = 22)) +
+        theme(axis.text.y = element_text(size = 22)))
 }
 
 anova_reduzida <- function(anova_base) {
@@ -45,13 +46,40 @@ anova_reduzida <- function(anova_base) {
 dummy_reg <- function(df) {
     n <- nrow(df)
     to_dummy <- cbind(1:n, df$`Região geográfica`) %>%
-    as.data.frame() %>%
-    rename_all(~ c("id", "Região geográfica")) %>%
-    mutate("Região geográfica" = factor(`Região geográfica`, levels = 1:4))
+        as.data.frame() %>%
+        rename_all(~ c("id", "Região geográfica")) %>%
+        mutate("Região geográfica" = factor(`Região geográfica`, levels = 1:4))
 
     dummy <- dummyVars(" ~ .", data = to_dummy)
     dummy_cols <- data.frame(predict(dummy, newdata = to_dummy))[, 2:4] %>%
-        rename_all(~c("Região1", "Região2", "Região3"))
-    
+        rename_all(~ c("Região1", "Região2", "Região3"))
+
     return(cbind(select(df, -`Região geográfica`), dummy_cols))
 }
+
+# breusch_pagan <- function(model, dataset, response) {
+#     p <- length(model$coefficients)
+#     n <- nrow(dataset)
+
+#     aux_mod <- lm(
+#         model$residuals^2 ~ .,
+#         data = select(train_df_medicos, -all_of(response))
+#     )
+    
+#     aux_res <- residuals(aux_mod)
+#     SSReg <- sum((predict(aux_mod) - mean(both_medicos$residuals^2))^2)
+#     aux_QMReg <- SSReg / (p - 1)
+#     SSRes <- sum(aux_res^2)
+#     aux_QMRes <- SSRes / (n - 3)
+#     F_calc <- aux_QMReg / aux_QMRes
+    
+#     p_val <- pf(F_calc, p - 1, n - 3, lower.tail = F)
+#     return(tibble(
+#         "Fonte de Variação" = c("Regressão", "Resíduos"),
+#         "gl" = c(p - 1, n - 3),
+#         "SS" = c(SSReg, SSRes),
+#         "QM" = c(aux_QMReg, aux_QMRes),
+#         "$F_c$" = c(F_calc, NA),
+#         "$P(F > F_c)$" = c(p_val, NA)
+#     ))
+# }
