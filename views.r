@@ -65,3 +65,7 @@ summary(both_medicos)[[4]] %>%
     scale_x_continuous(breaks = NULL) +
     theme_bw()) %>%
     ggsave(filename = "assets/seq_plot_medicos.png", .)
+
+shapiro.test(both_medicos$residuals)
+qqnorm(both_medicos$residuals)
+qqline(both_medicos$residuals)
