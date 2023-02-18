@@ -67,8 +67,11 @@ summary(both_medicos)[[4]] %>%
     ggsave(filename = "assets/seq_plot_medicos.png", .)
 
 shapiro.test(both_medicos$residuals)
+
+png(filename = "assets/qqplot_medicos.png")
 qqnorm(both_medicos$residuals)
 qqline(both_medicos$residuals)
+dev.off()
 
 anova_reduzida(alr3::pureErrorAnova(both_medicos)) %>%
     format_tab("Teste de falta de ajustamento para o MRL encontrado.", digits = 2, "latex")
