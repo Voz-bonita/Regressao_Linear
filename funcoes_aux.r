@@ -16,7 +16,8 @@ cor_matrix_plot <- function(x) {
     return(model.matrix(~ 0 + ., data = x) %>%
         cor(use = "pairwise.complete.obs") %>%
         ggcorrplot(show.diag = F, type = "lower", lab = T, lab_size = 7) +
-        theme(axis.text.x = element_text(angle = 90)))
+        theme(axis.text.x = element_text(angle = 30, size = 22)) +
+        theme(axis.text.y = element_text(size = 22)))
 }
 
 anova_reduzida <- function(anova_base) {
