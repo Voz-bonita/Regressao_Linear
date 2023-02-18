@@ -3,7 +3,7 @@ pacman::p_load(
     "kableExtra", "ggcorrplot", "psych", "purrr",
     "caret"
 )
-source("funcoes_aux.r", encoding="utf8")
+source("funcoes_aux.r", encoding = "utf8")
 
 
 data <- read_xls("dados.xls") %>%
@@ -36,4 +36,6 @@ val_df_medicos <- select(val_df, c("Médicos", "Região geográfica", lin)) %>% 
 intercepto_medicos <- lm(Médicos ~ 1, data = train_df_medicos)
 completo_medicos <- lm(Médicos ~ ., data = train_df_medicos)
 both_medicos <- step(intercepto_medicos, direction = "both", scope = formula(completo_medicos), trace = 1)
+
+both_medicos$coefficients
 both_medicos$anova
