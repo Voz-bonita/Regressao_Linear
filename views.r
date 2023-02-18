@@ -48,4 +48,7 @@ cor(train_df[, lin], train_df$Médicos) %>%
     mutate("P(Z > $Z_c$)" = format(pnorm(`$Z_c$`, lower.tail = F), digits = 3)) %>%
     format_tab("\\label{tab:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
 
-ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regiao, lin)))
+ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regiao, c(lin, "Médicos"))))
+
+anova_reduzida(anova(both_medicos)) %>%
+    format_tab("\\label{table:anovamed}ANOVA para oo MRL encontrado para o número de médicos da cidade", digits = 2, "latex")
