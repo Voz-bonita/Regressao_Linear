@@ -46,7 +46,7 @@ cor(train_df[, lin], train_df$Médicos) %>%
     mutate("$Z_c$" = (atanh(r_1) - atanh(r_2)) / sqrt(2 / (nrow(train_df) - 3))) %>%
     round(2) %>%
     mutate("P(Z > $Z_c$)" = format(pnorm(`$Z_c$`, lower.tail = F), digits = 3)) %>%
-    format_tab("\\label{tab:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
+    format_tab("\\label{table:corteste}Teste de Fisher para correlação linear simples entre o número de médicos e algumas variáveis explicativas.", format = "latex")
 
 ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regiao, c(lin, "Médicos"))))
 
