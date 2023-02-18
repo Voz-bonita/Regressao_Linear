@@ -52,3 +52,8 @@ ggsave(filename = "assets/cor_medicos.png", cor_matrix_plot(select(data_sem_regi
 
 anova_reduzida(anova(both_medicos)) %>%
     format_tab("\\label{table:anovamed}ANOVA para oo MRL encontrado para o número de médicos da cidade", digits = 2, "latex")
+
+summary(both_medicos)[[4]] %>%
+    as.data.frame() %>%
+    rename_all(~c("Estimativa", "EP", "$T_c$", "$P(T > |T_c|)$")) %>%
+    format_tab("\\label{table:ttestmed}Testes T performados para os coeficientes para o MRL encontrado", digits = 2, "latex")
