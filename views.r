@@ -55,5 +55,13 @@ anova_reduzida(anova(both_medicos)) %>%
 
 summary(both_medicos)[[4]] %>%
     as.data.frame() %>%
-    rename_all(~c("Estimativa", "EP", "$T_c$", "$P(T > |T_c|)$")) %>%
+    rename_all(~ c("Estimativa", "EP", "$T_c$", "$P(T > |T_c|)$")) %>%
     format_tab("\\label{table:ttestmed}Testes T performados para os coeficientes para o MRL encontrado", digits = 2, "latex")
+
+(ggplot(data = NULL) +
+    geom_point(aes(x = 1:(n / 2), y = both_medicos$residuals), size = 2) +
+    xlab("Ordem") +
+    ylab("Resíduo") +
+    scale_x_continuous(breaks = NULL) +
+    theme_bw()) %>%
+    ggsave(filename = "assets/seq_plot_medicos.png", .)
