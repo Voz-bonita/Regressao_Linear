@@ -70,8 +70,11 @@ shapiro.test(both_medicos$residuals)
 qqnorm(both_medicos$residuals)
 qqline(both_medicos$residuals)
 
-anova_reduzida(alr3::pureErrorAnova(both_medicos))
+anova_reduzida(alr3::pureErrorAnova(both_medicos)) %>%
+    format_tab("Teste de falta de ajustamento para o MRL encontrado.", digits = 2, "latex")
 
-bptest(both_medicos)
+# bptest(both_medicos)
 
-gvlma(both_medicos)
+summary(gvlma(both_medicos)) %>%
+    as.data.frame() %>%
+    format_tab("Testes para suposições sobre o MRL encontrado.", digits = 2, "latex")
