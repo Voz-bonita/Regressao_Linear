@@ -1,7 +1,8 @@
 pacman::p_load(
     "readxl", "dplyr", "ggplot2", "tidyr",
     "kableExtra", "ggcorrplot", "psych", "purrr",
-    "caret", "gvlma", "lmtest", "leaps", "ggpubr"
+    "caret", "gvlma", "lmtest", "leaps", "ggpubr",
+    "glue"
 )
 source("funcoes_aux.r", encoding = "utf8")
 
@@ -55,7 +56,7 @@ data_crimes <- data %>%
     mutate("Crimes" = Crimes / População * 1e5) %>%
     mutate("Pob_RendaP/C" = log(Pobres) + log(`Renda p/c`)) %>%
     mutate("Bach_Pob" = log(Bacharéis) + log(Pobres)) %>%
-    mutate("Inv_Renda" = 1 / `Renda Total`) %>%
+    mutate("Inv_Renda" = 1000000 / `Renda Total`) %>%
     select(-População, -Médicos)
 
 train_df_crimes <- data_crimes[train_i, ] %>% dummy_reg()
@@ -82,4 +83,5 @@ summary(both_crimes)
 anova_reduzida(anova(both_crimes))
 
 mod_train_crimes <- lm(Crimes ~ População18_34 + Leitos + Pobres + `Renda Total` + Inv_Renda + Região1, data = train_df_crimes)
+round(mod_train_crimes$coefficients, 2)
 summary(mod_train_crimes)
