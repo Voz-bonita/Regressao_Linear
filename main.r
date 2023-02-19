@@ -64,7 +64,7 @@ train_df_crimes <- data[train_i, ] %>% dummy_reg()
 val_df_crimes <- data[val_i, ] %>% dummy_reg()
 
 
-selecao_crimes <- regsubsets(Crimes ~ ., data = train_df_crimes, nbest = 10)
+selecao_crimes <- regsubsets(Crimes ~ ., data = train_df_crimes, nbest = 4)
 resumo_sel_crimes <- summary(selecao_crimes)
 n_parametros <- as.numeric(rownames(resumo_sel_crimes$which)) + 1
 
