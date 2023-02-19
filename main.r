@@ -55,6 +55,11 @@ data_crimes <- data %>%
     mutate("Crimes" = Crimes / População * 1e5) %>%
     select(-População)
 
+tmp <- data_crimes[["Região geográfica"]]
+data_crimes <- select(data_crimes, -`Região geográfica`) %>%
+    log() %>%
+    mutate("Região geográfica" = tmp)
+
 train_df_crimes <- data[train_i, ] %>% dummy_reg()
 val_df_crimes <- data[val_i, ] %>% dummy_reg()
 
