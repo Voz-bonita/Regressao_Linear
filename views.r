@@ -100,19 +100,20 @@ train_df_medicos[negativos, ] %>%
     theme(legend.position = "bottom")) %>%
     ggsave(filename = "assets/dispersao_logxlogy_crimes.png", .)
 
-cbind(round(resumo_tab_crimes$cp, 2), round(resumo_tab_crimes$adjr2, 2)) %>%
-    cbind(as.numeric(rownames(resumo_tab_crimes$which)) + 1) %>%
-    cbind(mantidas) %>%
-    as.data.frame() %>%
-    tibble::remove_rownames() %>%
-    rename_all(~ c("C(p)", "$R^2_a$", "p", "Variáveis Mantidas")) %>%
-    format_tab("\\label{table:var_selection_crimes}Critérios de seleção de modelos para a taxa de crimes", format = "latex")
 
 adjr2_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$adjr2, "Coeficiente de Determinação Ajustado")
 cp_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$cp, "C(p) de Mallows")
 bic_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$bic, "BIC")
-dbic <- resumo_sel_crimes$bic - min(resumo_sel_crimes$bic)
-wbic_crimes <- model_selection_plot(x = n_parametros, y = exp(-0.5*(dbic))/sum(exp(-0.5*dbic)), "w(BIC)")
+wbic_crimes <- model_selection_plot(x = n_parametros, y = bic_to_wbic(resumo_sel_crimes$bic), "w(BIC)")
 
 ggarrange(adjr2_crimes, cp_crimes, bic_crimes, wbic_crimes) %>%
     ggsave(filename = "assets/select_crit_crimes.png", .)
+
+cbind(round(resumo_tab_crimes$cp, 2), round(resumo_tab_crimes$adjr2, 2)) %>%
+    cbind(paste0(round(100*bic_to_wbic(resumo_tab_crimes$bic), 1), "%")) %>%
+    cbind(as.numeric(rownames(resumo_tab_crimes$which)) + 1) %>%
+    cbind(mantidas) %>%
+    as.data.frame() %>%
+    tibble::remove_rownames() %>%
+    rename_all(~ c("C(p)", "$R^2_a$", "w(BIC)", "p", "Variáveis Mantidas")) %>%
+    format_tab("\\label{table:var_selection_crimes}Critérios de seleção de modelos para a taxa de crimes", format = "latex")

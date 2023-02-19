@@ -91,3 +91,10 @@ model_selection_plot <- function(x, y, ...) {
     xlab("Número de Parâmetros") +
     ylab(...))
 }
+
+bic_to_wbic <- function(x) {
+    dbic <- x - min(x)
+    e_dbic <- exp(-0.5*dbic)
+    wbic <- e_dbic / sum(e_dbic)
+    return(wbic)
+}
