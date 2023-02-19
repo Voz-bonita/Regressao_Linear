@@ -70,5 +70,16 @@ resumo_tab_crimes <- summary(selecao_crimes_tabular)
 variaveis <- names(train_df_crimes)
 n_vars <- length(variaveis)
 mantidas <- apply(resumo_tab_crimes$which, 1, function(x) {
-    paste0(variaveis[x[2:(n_vars)]], collapse = ", ")
+    paste0(names(x)[x][-1], collapse = ", ")
 })
+
+intercepto_crimes <- lm(Crimes ~ 1, data = train_df_crimes)
+completo_crimes <- lm(Crimes ~ ., data = train_df_crimes)
+both_crimes <- step(intercepto_crimes, direction = "both", scope = formula(completo_crimes))
+
+both_crimes$coefficients
+summary(both_crimes)
+anova_reduzida(anova(both_crimes))
+
+mod_train_crimes <- lm(Crimes ~ População18_34 + Leitos + Pobres + `Renda Total` + Inv_Renda + Região1, data = train_df_crimes)
+summary(mod_train_crimes)
