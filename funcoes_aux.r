@@ -111,3 +111,34 @@ interaction_reg <- function(data, x, y, ...) {
         ylab("Taxa de Crimes") +
         theme(legend.position = "bottom"))
 }
+
+residual_analysis <- function(model, name) {
+    summary(gvlma(model)) %>%
+        as.data.frame() %>%
+        format_tab("\\label{table:pressupostos{name}}Testes para suposições sobre o MRL encontrado.", digits = 2, "latex") %>%
+        print()
+
+    n <- length(model$residuals)
+    anova_reduzida(anova(model)) %>%
+        format_tab("\\label{table:anova{name}}ANOVA para o MRL encontrado para o número de médicos da cidade", digits = 2, "latex") %>%
+        print()
+
+    summary(model)[[4]] %>%
+        as.data.frame() %>%
+        rename_all(~ c("Estimativa", "EP", "$T_c$", "$P(T > |T_c|)$")) %>%
+        format_tab("\\label{table:ttest{name}}Testes T performados para os coeficientes para o MRL encontrado", digits = 2, "latex") %>%
+        print()
+
+    (ggplot(data = NULL) +
+        geom_point(aes(x = 1:n, y = model$residuals), size = 2) +
+        xlab("Ordem") +
+        ylab("Resíduo") +
+        scale_x_continuous(breaks = NULL) +
+        theme_bw()) %>%
+        ggsave(filename = glue("assets/seq_plot_{name}.png"), .)
+    
+    png(filename = glue("assets/qqplot_{name}.png"))
+    qqnorm(model$residuals)
+    qqline(model$residuals)
+    dev.off()
+}
