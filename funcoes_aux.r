@@ -98,3 +98,13 @@ bic_to_wbic <- function(x) {
     wbic <- e_dbic / sum(e_dbic)
     return(wbic)
 }
+
+interaction_reg <- function(data, x, y) {
+    x <- data[[x]]
+    y <- data[[y]]
+    return(ggplot(data = data, aes(x = x, y = y, color = `Região geográfica`)) +
+        geom_point(size = 4) +
+        geom_smooth(method = lm) +
+        facet_wrap(~`Região geográfica`, scale = "free_x") +
+        theme_bw())
+}

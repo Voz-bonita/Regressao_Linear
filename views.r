@@ -89,8 +89,10 @@ train_df_medicos[negativos, ] %>%
     format_tab("\\label{table:negativomed}Observações cujos valores previstos para o número de médicos foi negativo.", digits = 2, "latex")
 
 (ggplot(
-    pivot_longer(train_df_crimes, cols = -c(`Região geográfica`, Crimes)),
-    aes(x = log(value), y = log(Crimes), color = `Região geográfica`)
+    pivot_longer(
+        data_crimes[train_i, ], 
+        cols = -c(`Região geográfica`, Crimes, `Pob_RendaP/C`, Bach_Pob, Inv_Renda)),
+    aes(x = value, y = Crimes, color = `Região geográfica`)
 ) +
     geom_point() +
     facet_wrap(~name, scales = "free_x") +
@@ -100,6 +102,12 @@ train_df_medicos[negativos, ] %>%
     theme(legend.position = "bottom")) %>%
     ggsave(filename = "assets/dispersao_logxlogy_crimes.png", .)
 
+inv_renda_crimes <- interaction_reg(data_crimes[train_i, ], "Inv_Renda", "Crimes")
+pob_rendapc_crimes <- interaction_reg(data_crimes[train_i, ], "Pob_RendaP/C", "Crimes")
+bach_pob_crimes <- interaction_reg(data_crimes[train_i, ], "Bach_Pob" , "Crimes")
+ggsave(filename = "assets/inv_renda_crimes.png", inv_renda_crimes)
+ggsave(filename = "assets/pob_rendapc_crimes.png", pob_rendapc_crimes)
+ggsave(filename = "assets/bach_pob_crimes.png", bach_pob_crimes)
 
 adjr2_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$adjr2, "Coeficiente de Determinação Ajustado")
 cp_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$cp, "C(p) de Mallows")

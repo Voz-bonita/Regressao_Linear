@@ -53,15 +53,13 @@ final_mod <- lm(formula = Médicos ~ `Renda Total` + Leitos + População, data 
 #---------------------------------
 data_crimes <- data %>%
     mutate("Crimes" = Crimes / População * 1e5) %>%
-    select(-População)
+    mutate("Pob_RendaP/C" = log(Pobres) + log(`Renda p/c`)) %>%
+    mutate("Bach_Pob" = log(Bacharéis) + log(Pobres)) %>%
+    mutate("Inv_Renda" = 1 / `Renda Total`) %>%
+    select(-População, -Médicos)
 
-tmp <- data_crimes[["Região geográfica"]]
-data_crimes <- select(data_crimes, -`Região geográfica`) %>%
-    log() %>%
-    mutate("Região geográfica" = tmp)
-
-train_df_crimes <- data[train_i, ] %>% dummy_reg()
-val_df_crimes <- data[val_i, ] %>% dummy_reg()
+train_df_crimes <- data_crimes[train_i, ] %>% dummy_reg()
+val_df_crimes <- data_crimes[val_i, ] %>% dummy_reg()
 
 
 selecao_crimes <- regsubsets(Crimes ~ ., data = train_df_crimes, nbest = 4)
