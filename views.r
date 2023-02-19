@@ -107,3 +107,12 @@ cbind(round(resumo_tab_crimes$cp, 2), round(resumo_tab_crimes$adjr2, 2)) %>%
     tibble::remove_rownames() %>%
     rename_all(~ c("C(p)", "$R^2_a$", "p", "Variáveis Mantidas")) %>%
     format_tab("\\label{table:var_selection_crimes}Critérios de seleção de modelos para a taxa de crimes", format = "latex")
+
+adjr2_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$adjr2, "Coeficiente de Determinação Ajustado")
+cp_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$cp, "C(p) de Mallows")
+bic_crimes <- model_selection_plot(x = n_parametros, y = resumo_sel_crimes$bic, "BIC")
+dbic <- resumo_sel_crimes$bic - min(resumo_sel_crimes$bic)
+wbic_crimes <- model_selection_plot(x = n_parametros, y = exp(-0.5*(dbic))/sum(exp(-0.5*dbic)), "w(BIC)")
+
+ggarrange(adjr2_crimes, cp_crimes, bic_crimes, wbic_crimes) %>%
+    ggsave(filename = "assets/select_crit_crimes.png", .)

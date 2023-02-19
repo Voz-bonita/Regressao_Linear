@@ -83,3 +83,11 @@ dummy_reg <- function(df) {
 #         "$P(F > F_c)$" = c(p_val, NA)
 #     ))
 # }
+
+model_selection_plot <- function(x, y, ...) {
+    return(ggplot(data = NULL, aes(x = x, y = y)) +
+        geom_point(size = 4) +
+    theme_bw() +
+    xlab("Número de Parâmetros") +
+    ylab(...))
+}
