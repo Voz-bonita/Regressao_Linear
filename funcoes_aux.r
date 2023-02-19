@@ -142,3 +142,32 @@ residual_analysis <- function(model, name) {
     qqline(model$residuals)
     dev.off()
 }
+
+outlier_plots <- function(mod, name) {
+    n <- length(mod$residuals)
+    p <- length(mod$coefficients)
+    indice <- 1:n
+    png(filename = glue("assets/hii_{name}.png"))
+    plot(indice, hatvalues(mod), type="l")
+    abline(h=2*p/n)
+    dev.off()
+
+    outliers <- influence.measures(mod)
+    
+    for (i in 1:p) {
+        png(filename = glue("assets/DFBETA{i-1}_{name}.png"))
+        plot(indice, outliers$infmat[,i], type = "l", ylab = glue("DEBTA{i-1}"))
+        abline(h=sqrt(p/n))
+        abline(h=-sqrt(p/n))
+        dev.off()
+    }
+    
+
+    png(filename = glue("assets/DFFITS_{name}.png"))
+    plot(indice, abs(dffits(mod)), type = "l", ylab = "|DFFITS|")
+    abline(h=2*sqrt(p/n))
+    dev.off()
+    png(filename = glue("assets/Cook_{name}.png"))
+    plot(indice, cooks.distance(mod), type = "l", ylab = "Cook_D") 
+    dev.off()
+}

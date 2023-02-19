@@ -131,3 +131,4 @@ cbind(round(resumo_tab_crimes$cp, 2), round(resumo_tab_crimes$adjr2, 2)) %>%
     format_tab("\\label{table:var_selection_crimes}Critérios de seleção para os dois melhores subconjuntos de variáveis explicativas, por número de parâmetros, para o MRL da taxa de crimes na cidade.", format = "latex")
 
 residual_analysis(mod_train_crimes, "crimes")
+outlier_plots(mod_train_crimes, "crimes")
