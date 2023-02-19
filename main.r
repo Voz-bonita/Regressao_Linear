@@ -1,7 +1,7 @@
 pacman::p_load(
     "readxl", "dplyr", "ggplot2", "tidyr",
     "kableExtra", "ggcorrplot", "psych", "purrr",
-    "caret", "gvlma", "lmtest"
+    "caret", "gvlma", "lmtest", "leaps"
 )
 source("funcoes_aux.r", encoding = "utf8")
 
@@ -70,15 +70,3 @@ n_vars <- length(variaveis)
 mantidas <- apply(resumo_tab_crimes$which, 1, function(x) {
     paste0(variaveis[x[2:(n_vars)]], collapse = ", ")
 })
-cbind(round(resumo_tab_crimes$cp, 2), round(resumo_tab_crimes$adjr2, 2)) %>%
-    cbind(as.numeric(rownames(resumo_tab_crimes$which)) + 1) %>%
-    cbind(mantidas) %>%
-    as.data.frame() %>%
-    rename_all(~ c("C(p)", "$R^2_a$", "p", "Variáveis Mantidas")) %>%
-    format_tab("\\label{table:var_selection_crimes}Critérios de seleção de modelos para a taxa de crimes", format = "latex")
-
-
-plot(n_parametros, resumo_sel_crimes$rsq, xlab = "N o de parametros", ylab = "R^2")
-plot(n_parametros, resumo_sel_crimes$adjr2, xlab = "N o de parametros", ylab = "R^2 adj")
-plot(n_parametros, resumo_sel_crimes$cp, xlab = "N o de parametros", ylab = "Estatistica Cp")
-plot(n_parametros, resumo_sel_crimes$bic, xlab = "N o de parametros", ylab = "BIC")
