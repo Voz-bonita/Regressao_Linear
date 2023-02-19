@@ -99,12 +99,15 @@ bic_to_wbic <- function(x) {
     return(wbic)
 }
 
-interaction_reg <- function(data, x, y) {
-    x <- data[[x]]
-    y <- data[[y]]
-    return(ggplot(data = data, aes(x = x, y = y, color = `Região geográfica`)) +
+interaction_reg <- function(data, x, y, ...) {
+    x_dat <- data[[x]]
+    y_dat <- data[[y]]
+    return(ggplot(data = data, aes(x = x_dat, y = y_dat, color = `Região geográfica`)) +
         geom_point(size = 4) +
         geom_smooth(method = lm) +
         facet_wrap(~`Região geográfica`, scale = "free_x") +
-        theme_bw())
+        theme_bw() +
+        xlab(...) + 
+        ylab("Taxa de Crimes") +
+        theme(legend.position = "bottom"))
 }

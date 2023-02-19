@@ -102,9 +102,9 @@ train_df_medicos[negativos, ] %>%
     theme(legend.position = "bottom")) %>%
     ggsave(filename = "assets/dispersao_logxlogy_crimes.png", .)
 
-inv_renda_crimes <- interaction_reg(data_crimes[train_i, ], "Inv_Renda", "Crimes")
-pob_rendapc_crimes <- interaction_reg(data_crimes[train_i, ], "Pob_RendaP/C", "Crimes")
-bach_pob_crimes <- interaction_reg(data_crimes[train_i, ], "Bach_Pob" , "Crimes")
+inv_renda_crimes <- interaction_reg(data_crimes[train_i, ], "Inv_Renda", "Crimes", "Inverso da Renda")
+pob_rendapc_crimes <- interaction_reg(data_crimes[train_i, ], "Pob_RendaP/C", "Crimes", "Interação entre Renda per Capita e Pobreza")
+bach_pob_crimes <- interaction_reg(data_crimes[train_i, ], "Bach_Pob" , "Crimes", "Interação entre proporções de Bacharéis e Pobres")
 ggsave(filename = "assets/inv_renda_crimes.png", inv_renda_crimes)
 ggsave(filename = "assets/pob_rendapc_crimes.png", pob_rendapc_crimes)
 ggsave(filename = "assets/bach_pob_crimes.png", bach_pob_crimes)
