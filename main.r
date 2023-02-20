@@ -85,3 +85,11 @@ anova_reduzida(anova(both_crimes))
 mod_train_crimes <- lm(Crimes ~ População18_34 + Leitos + Pobres + `Renda Total` + Inv_Renda + Região1, data = train_df_crimes)
 round(mod_train_crimes$coefficients, 2)
 summary(mod_train_crimes)
+
+mod_val_crimes <- lm(Crimes ~ População18_34 + Leitos + Pobres + `Renda Total` + Inv_Renda + Região1, data = val_df_crimes)
+unname(mod_val_crimes$coefficients)
+summary(mod_val_crimes)
+
+mod_full_crimes <- lm(Crimes ~ População18_34 + Leitos + Pobres + `Renda Total` + Inv_Renda + Região1, data = data_crimes %>% dummy_reg())
+unname(mod_full_crimes$coefficients)
+summary(mod_full_crimes)
